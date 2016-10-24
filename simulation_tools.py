@@ -28,8 +28,6 @@ def clean_raw_file(spice_exe_path, file_path, output_path, output_header):
     print('Cleaning up file: ' + file_name + '.raw')
 
     reading_header = True
-    preffered_sorting = [0, 1, 5, 4, 2, 6, 3]
-    variable_numbering = {'time': 0, 'V(n_upper)': 2, 'V(n_out)': 5, 'I(snubber_lower)': 19, 'I(snubber_upper)': 20, 'I(upper)': 40, 'I(lower)': 41}
     data = []
     data_line = []
 
@@ -46,7 +44,7 @@ def clean_raw_file(spice_exe_path, file_path, output_path, output_header):
                 continue
         else:
             data_line_num = (line_num - header_length) % number_of_vars
-            if data_line_num in variable_numbering.values():
+            if data_line_num in config.variable_numbering.values():
                 data_line.append(line.split('\t')[-1].split('\n')[0])
             if data_line_num == number_of_vars - 1:
                 data.append(data_line)
@@ -55,9 +53,9 @@ def clean_raw_file(spice_exe_path, file_path, output_path, output_header):
     f.close()
 
     # Rearrange data
-    variables = sorted(variable_numbering, key=variable_numbering.__getitem__)
-    variables = np.array(variables)[preffered_sorting].tolist()
-    data = np.array(data)[:, preffered_sorting]
+    variables = sorted(config.variable_numbering, key=config.variable_numbering.__getitem__)
+    variables = np.array(variables)[config.preffered_sorting].tolist()
+    data = np.array(data)[:, config.preffered_sorting]
 
     # Write data to file
     f = open(output_path, 'w+')
