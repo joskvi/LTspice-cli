@@ -7,6 +7,28 @@ import matplotlib.pyplot as plt
 
 import config
 
+
+
+# ----------- Simulation controls ----------- #
+
+def run_simulations(param, param_value_list, run_simulation=True):
+
+    file_path = config.LTSpice_asc_filename[:-4] # Use .asc file specified in config, but remove file ending
+    file_path_new = file_path + '_new'
+    spice_exe_path = config.LTSpice_executable_path
+
+    for i, param_value in enumerate(param_value_list):
+
+        output_path = config.output_data_path + param + '=' + str(param_value) + '.txt'
+
+        print('\nStarting simulation with param ' + param + '=' + str(param_value))
+        set_params(file_path + '.asc', param, param_value)
+        if run_simulation:
+            simulate(spice_exe_path, file_path_new)
+
+        output_header = 'SPICE simulation result. Parameters: ' + ', '.join(get_params(file_path_new + '.asc')) + '\n' # Maybe not add the time variables
+        clean_raw_file(spice_exe_path, file_path_new, output_path, output_header)
+
 def simulate(spice_exe_path, file_path):
     file_name = str(file_path.split('\\')[-1])
     print('Simulation starting: ' + file_name + '.asc')
@@ -70,8 +92,40 @@ def clean_raw_file(spice_exe_path, file_path, output_path, output_header):
 
     return data
 
+
+
+# ----------- Parameter controls ----------- #
+
+def parse_param_file(filename):
+
+    asc_file_path = config.LTSpice_asc_filename
+
+    parameter_run_list = []
+    param_file = open(filename, 'r')
+
+    for line in param_file:
+        line = line.split()
+        try:
+            cmd = line[0]
+            if cmd[0] == '#':
+                continue
+            elif cmd.lower() == 'set':
+                parameter = line[1]
+                value = line[2]
+                set_params(asc_file_path, parameter, value, True)
+                print("Setting " + parameter + " to " + str(value))
+            elif cmd.lower() == 'run':
+                parameter = line[1]
+                values = line[2:]
+                parameter_run_list.append((parameter, values))
+            else:
+                return None # Syntax error
+        except IndexError:
+            return None # Syntax error
+
+    return parameter_run_list
+
 def set_params(file_path, param, param_val, overwrite=False):
-    # Create temp file
     f, abs_path = mkstemp()
     with open(abs_path,'w') as new_file:
         with open(file_path) as old_file:
@@ -102,21 +156,3 @@ def get_params(file_path):
             output_list.extend(line_list[line_list.index('!.param') + 1:])
     f.close()
     return output_list
-
-def run_tests(param, param_value_list, run_simulation=True):
-
-    file_path = config.LTSpice_asc_filename[:-4] # Use .asc file specified in config, but remove file ending
-    file_path_new = file_path + '_new'
-    spice_exe_path = config.LTSpice_executable_path
-
-    for i, param_value in enumerate(param_value_list):
-
-        output_path = config.output_data_path + param + '=' + str(param_value) + '.txt'
-
-        print('\nStarting simulation with param ' + param + '=' + str(param_value))
-        set_params(file_path + '.asc', param, param_value)
-        if run_simulation:
-            simulate(spice_exe_path, file_path_new)
-
-        output_header = 'SPICE simulation result. Parameters: ' + ', '.join(get_params(file_path_new + '.asc')) + '\n' # Maybe not add the time variables
-        clean_raw_file(spice_exe_path, file_path_new, output_path, output_header)

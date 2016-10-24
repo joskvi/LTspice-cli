@@ -1,6 +1,9 @@
+
 # Config values for running LTSpiceIV simulations and analysis_tools
-output_data_path = 'data/' # Leave blank if output should be writtten to root folder
-output_data_summary_filename = 'outdata.txt'
+
+output_data_path = 'data/' # Leave blank if output should be writtten to root folder.
+output_data_naming_convention = 'parameter' # Assumes parameter by default. Set to 'parameter' or 'number'.
+
 LTSpice_executable_path = 'C:\Program Files (x86)\LTC\LTspiceIV\scad3.exe'
 LTSpice_asc_filename = 'example_circuit.asc' # 'example_circuit.asc'
 
