@@ -1,5 +1,5 @@
-set R 12
-set C 100
-#this is a comment
-# this as well
-run C 1n 2n 3n 4n
+# First run
+set R 500
+run C 1n 2n 3n
+# Second run
+run C 1n 2n 3n

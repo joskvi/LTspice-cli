@@ -2,5 +2,5 @@
 *.log
 *.net
 *.raw
-_new.asc*
+_generated.asc*
 data
