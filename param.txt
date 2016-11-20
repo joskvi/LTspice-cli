@@ -1,5 +1,0 @@
-# First run
-set R 500
-run C 1n 2n 3n
-# Second run
-run C 1n 2n 3n

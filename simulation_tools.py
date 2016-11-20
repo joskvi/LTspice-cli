@@ -96,7 +96,11 @@ def clean_raw_file(spice_exe_path, file_path, output_path, output_header):
     data = np.array(data)[:, config.preffered_sorting]
 
     # Write data to file
-    f = open(output_path, 'w+')
+    try:
+        f = open(output_path, 'w+')
+    except IOError:
+        print('\nThe path specified for saving output data, \'' + config.output_data_path + '\', doesn\'t appear to exist.\nPlease check if the filepath set in \'config.py\' is correct.')
+        exit(0)
     f.write(output_header)
     f.write('\t'.join(variables) + '\n')
     for line in data:
