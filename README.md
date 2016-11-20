@@ -8,10 +8,10 @@ LTspice-cli is a command line tool, which enables running simulations in LTspice
 
 After downloading the files, the config.py file must be edited. Once configurated, a simulation can be run using
 ```
-python auto.py -r
+python run.py -r
 ```
 To specify a file containing parameters, use
 ```
-python auto.py -f <inputfile>
+python run.py -f <inputfile>
 ```
 Use option -h to see help in the command line.
