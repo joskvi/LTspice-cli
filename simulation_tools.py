@@ -41,10 +41,10 @@ def run_simulations(parameter_set=None):
         # Run a simulation with the preset values of the file
         output_path = config.output_data_path + 'result.txt'
         print('Starting simulation.')
-        simulate(spice_exe_path, file_path_generated)
+        simulate(spice_exe_path, file_path)
         # Set header and cleanup the file
-        output_header = 'SPICE simulation result. Parameters: ' + ', '.join(get_parameters(file_path_generated + '.asc')) + '\n' # Maybe not add the time variables
-        clean_raw_file(spice_exe_path, file_path_generated, output_path, output_header)
+        output_header = 'SPICE simulation result. Parameters: ' + ', '.join(get_parameters(file_path + '.asc')) + '\n' # Maybe not add the time variables
+        clean_raw_file(spice_exe_path, file_path, output_path, output_header)
 
 def simulate(spice_exe_path, file_path):
     file_name = str(file_path.split('\\')[-1])
