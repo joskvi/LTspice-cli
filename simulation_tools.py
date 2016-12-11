@@ -3,14 +3,13 @@ import os
 from tempfile import mkstemp
 from shutil import move
 import numpy as np
-import matplotlib.pyplot as plt
 
 import config
 
 
 # ----------- Simulation controls ----------- #
 
-def run_simulations(parameter_set=None):
+def run_simulations(parameter_set=None, numerical_name_start=0):
 
     # Set appropriate variables according to the argument of parameter_set
     if parameter_set is not None:
@@ -32,7 +31,12 @@ def run_simulations(parameter_set=None):
         # Run a simulation for each parameter value in the parameter set
         for i, parameter_value in enumerate(parameter_value_list):
             # Set specified parameters
-            output_path = config.output_data_path + parameter + '=' + str(parameter_value) + '.txt'
+            if config.output_data_naming_convention == 'number':
+                file_num = str(i + numerical_name_start)
+                output_name = '0'*(3-len(file_num)) + file_num
+                output_path = config.output_data_path + output_name + '.txt'
+            else:
+                output_path = config.output_data_path + parameter + '=' + str(parameter_value) + '.txt'
             output_filenames.append(output_path)
             set_parameters(file_path + '.asc', parameter, parameter_value)
             print('Starting simulation with the specified parameter: ' + parameter + '=' + str(parameter_value))

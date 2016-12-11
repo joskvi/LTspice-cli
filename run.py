@@ -1,6 +1,7 @@
 import sys, getopt
 import simulation_tools
 import config
+import analysis_tools
 
 def simulate(filename=None, do_analysis=False):
 
@@ -11,6 +12,8 @@ def simulate(filename=None, do_analysis=False):
         command_list = simulation_tools.parse_parameter_file(filename)
 
         # Run the list of commands
+        number_of_finished_simulations = 0
+        all_filenames = []
         if command_list is None:
             print('Syntax error in parameter file.')
             return
@@ -26,17 +29,23 @@ def simulate(filename=None, do_analysis=False):
                 parameter_values = command[2]
                 # Run tests with the given parameter and corresponding list of parameter values
                 # The filenames of the output data is returned
-                filenames = simulation_tools.run_simulations([parameter, parameter_values])
+                filenames = simulation_tools.run_simulations([parameter, parameter_values], number_of_finished_simulations)
+                all_filenames.extend(filenames)
+                number_of_finished_simulations += len(parameter_values)
                 if do_analysis:
                     analyze(filenames)
-            print '\n'
+
+        # If analysis made, make a report with all the analysied data
+        if do_analysis:
+            analysis_tools.make_report(all_filenames)
     else:
         # No parameter file is specified, run simulations with defaults values
         simulation_tools.run_simulations()
 
 def analyze(filenames):
     # Any analysis to be done on the simulation results can be be coded here.
-    pass
+    for filename in filenames:
+        analysis_tools.analyze_data(filename)
 
 def help():
     print 'auto.py -r -f <parameterFile> -a\nUsing the option -a to analyze, requires -f to be set'

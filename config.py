@@ -15,6 +15,7 @@ preffered_sorting = [0, 1, 2]
 
 # Leave blank if output should be writtten to root folder.
 output_data_path = 'data/'
-# Assumes parameter by default. Set to 'parameter' or 'number'.
-# YET TO BE IMPLEMENTED
-output_data_naming_convention = 'parameter'
+# Naming convention for output files. Can be numerical names, increasing in value as output is created.
+# Parameter names gives the files the name of the parameter that it is run with.
+# Assumes number by default. Set to 'parameter' or 'number'.
+output_data_naming_convention = 'number'
