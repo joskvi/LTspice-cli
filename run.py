@@ -1,7 +1,10 @@
 import sys, getopt
 import simulation_tools
 import config
-import analysis_tools
+try:
+    import analysis_tools
+except ImportError:
+    pass
 
 def simulate(filename=None, do_analysis=False):
 
