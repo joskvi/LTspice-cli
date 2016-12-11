@@ -55,10 +55,14 @@ def simulate(spice_exe_path, file_path):
     print('Simulation finished: ' + file_name + '.raw created (' + str(size/1000) + ' kB)')
 
 def clean_raw_file(spice_exe_path, file_path, output_path, output_header):
+
+    # Try to open the requested file
     file_name = file_path
     try:
         f = open(file_path + '.raw', 'r')
     except IOError:
+        # If the requested raw file is not found, simulations will be run,
+        # assuming a that a corresponding LTspice schematic exists
         print('File not found: ' + file_name + '.raw')
         simulate(spice_exe_path, file_path)
         f = open(file_path + '.raw', 'r')
@@ -116,13 +120,13 @@ def clean_raw_file(spice_exe_path, file_path, output_path, output_header):
 
 def parse_parameter_file(filename):
 
-    asc_file_path = config.LTSpice_asc_filename
-
-    parameter_run_list = []
+    cmd_list = []
     param_file = open(filename, 'r')
 
     for line in param_file:
         line = line.split()
+        if len(line) == 0:
+            continue
         try:
             cmd = line[0]
             if cmd[0] == '#':
@@ -130,18 +134,17 @@ def parse_parameter_file(filename):
             elif cmd.lower() == 'set':
                 parameter = line[1]
                 value = line[2]
-                set_parameters(asc_file_path, parameter, value, True)
-                print('Setting parameter:  ' + str(parameter) + '=' + str(value))
+                cmd_list.append(('s', parameter, value))
             elif cmd.lower() == 'run':
                 parameter = line[1]
                 values = line[2:]
-                parameter_run_list.append((parameter, values))
+                cmd_list.append(('r', parameter, values))
             else:
                 return None # Syntax error
         except IndexError:
             return None # Syntax error
 
-    return parameter_run_list
+    return cmd_list
 
 def set_parameters(file_path, param, param_val, overwrite=False):
     f, abs_path = mkstemp()

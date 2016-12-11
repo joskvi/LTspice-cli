@@ -16,4 +16,5 @@ preffered_sorting = [0, 1, 2]
 # Leave blank if output should be writtten to root folder.
 output_data_path = 'data/'
 # Assumes parameter by default. Set to 'parameter' or 'number'.
+# YET TO BE IMPLEMENTED
 output_data_naming_convention = 'parameter'
