@@ -5,4 +5,4 @@ set R 500
 run C 1n 2n 3n
 
 # Second simulation run
-run C 1n 2n 3n
+# run C 1n 2n 3n

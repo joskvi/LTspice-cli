@@ -2,7 +2,7 @@ import sys, getopt
 import simulation_tools
 import config
 
-def simulate(filename=None):
+def simulate(filename=None, do_analysis=False):
 
     asc_file_path = config.LTSpice_asc_filename
 
@@ -25,34 +25,49 @@ def simulate(filename=None):
                 parameter = command[1]
                 parameter_values = command[2]
                 # Run tests with the given parameter and corresponding list of parameter values
-                simulation_tools.run_simulations([parameter, parameter_values])
+                # The filenames of the output data is returned
+                filenames = simulation_tools.run_simulations([parameter, parameter_values])
+                if do_analysis:
+                    analyze(filenames)
             print '\n'
     else:
-        # No parameters are set, run simulations with defaults values
+        # No parameter file is specified, run simulations with defaults values
         simulation_tools.run_simulations()
 
+def analyze(filenames):
+    # Any analysis to be done on the simulation results can be be coded here.
+    pass
+
 def help():
-    print 'auto.py -r -f <parameterFile>'
+    print 'auto.py -r -f <parameterFile> -a\nUsing the option -a to analyze, requires -f to be set'
 
 def main(argv):
 
     # Get arguments
     try:
-        opts, args = getopt.getopt(argv, 'hrf:', ['file=', 'run'])
+        opts, args = getopt.getopt(argv, 'hrf:a', ['file=', 'run'])
     except getopt.GetoptError:
         help()
         sys.exit(2)
 
-    # Run program based on arguments
+    # Parse arguments
+    parameter_file = None
+    do_analysis = False
     for opt, arg in opts:
         if opt == '-h':
             help()
             sys.exit()
         elif opt in ('-f', '--file'):
             parameter_file = arg
-            simulate(parameter_file)
+        elif opt in ('-a'):
+            do_analysis = True
         elif opt in ('-r', '--run'):
             simulate()
+            sys.exit()
+
+    # Run simulations based on arguments
+    if parameter_file is not None:
+        simulate(parameter_file, do_analysis)
 
 if __name__ == '__main__':
     main(sys.argv[1:])

@@ -25,11 +25,15 @@ def run_simulations(parameter_set=None):
     file_path_generated = file_path + '_generated'
     spice_exe_path = config.LTSpice_executable_path
 
+    # Create a list of the generated files
+    output_filenames = []
+
     if not use_default_parameters:
         # Run a simulation for each parameter value in the parameter set
         for i, parameter_value in enumerate(parameter_value_list):
             # Set specified parameters
             output_path = config.output_data_path + parameter + '=' + str(parameter_value) + '.txt'
+            output_filenames.append(output_path)
             set_parameters(file_path + '.asc', parameter, parameter_value)
             print('Starting simulation with the specified parameter: ' + parameter + '=' + str(parameter_value))
             # Run simulation
@@ -45,6 +49,9 @@ def run_simulations(parameter_set=None):
         # Set header and cleanup the file
         output_header = 'SPICE simulation result. Parameters: ' + ', '.join(get_parameters(file_path + '.asc')) + '\n' # Maybe not add the time variables
         clean_raw_file(spice_exe_path, file_path, output_path, output_header)
+
+    # Return the list with names of the output filenames
+    return output_filenames
 
 def simulate(spice_exe_path, file_path):
     file_name = str(file_path.split('\\')[-1])
