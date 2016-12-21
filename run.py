@@ -6,6 +6,7 @@ try:
 except ImportError:
     pass
 
+
 def simulate(filename=None, do_analysis=False):
 
     asc_file_path = config.LTSpice_asc_filename
