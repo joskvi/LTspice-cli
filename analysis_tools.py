@@ -249,7 +249,7 @@ def calculate_ringing(time, data, nominal_value):
     decay_ratio = (-1) * np.mean(decay_ratios)
     return (ringing_freq, decay_ratio)
 
-def calculate_switching_times_alt(data, nominal_value):
+def calculate_switching_times_alternative(data, nominal_value):
 
     going_up = False
     going_down = False

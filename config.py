@@ -13,7 +13,7 @@ variable_numbering = {'time': 0, 'V_c': 2, 'I_c': 3}
 # E.g. switch place of 0 and 1 if you want V_c to be placed left of time in the output csv files.
 preffered_sorting = [0, 1, 2]
 
-# Leave blank if output should be writtten to root folder.
+# Leave blank if output should be writtten to root folder. The folder specified must be created manually if it doesn't exist.
 output_data_path = 'data/'
 # Naming convention for output files. Can be numerical names, increasing in value as output is created.
 # Parameter names gives the files the name of the parameter that it is run with.
