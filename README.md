@@ -2,7 +2,7 @@
 
 ## About
 
-LTspice-cli is a command line tool, which enables running simulations in LTspice from the command line. It also has the ability to specify a file containing the circuit parameters which the simulations should be run with. LTspice-cli is written in Python, and requires NumPy to run. The tool is only tested with LTspice IV.
+LTspice-cli is a command line tool, which enables running simulations in LTspice from the command line. It also has the ability to specify a file containing the circuit parameters which the simulations should be run with. LTspice-cli is written in Python 2.7, and requires NumPy to run. The tool is only tested with LTspice IV.
 
 ## How to use
 
